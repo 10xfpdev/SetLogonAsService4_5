@@ -23,6 +23,7 @@ namespace SetLogonAsService4_5 {
             );
 
         [DllImport("advapi32.dll", SetLastError = true, PreserveSig = true)]
+        // Return type changed from long to int since long was giving random return values
         private static extern int LsaAddAccountRights(
             IntPtr PolicyHandle,
             IntPtr AccountSid,
