@@ -23,7 +23,7 @@ namespace SetLogonAsService4_5 {
             );
 
         [DllImport("advapi32.dll", SetLastError = true, PreserveSig = true)]
-        private static extern long LsaAddAccountRights(
+        private static extern int LsaAddAccountRights(
             IntPtr PolicyHandle,
             IntPtr AccountSid,
             LSA_UNICODE_STRING[] UserRights,
@@ -178,10 +178,12 @@ namespace SetLogonAsService4_5 {
                     userRights[0].Buffer = Marshal.StringToHGlobalUni(privilegeName);
                     userRights[0].Length = (UInt16)(privilegeName.Length * UnicodeEncoding.CharSize);
                     userRights[0].MaximumLength = (UInt16)((privilegeName.Length + 1) * UnicodeEncoding.CharSize);
-
                     //add the right to the account
-                    long res = LsaAddAccountRights(policyHandle, sid, userRights, 1);
+
+                    int res = LsaAddAccountRights(policyHandle, sid, userRights, 1);
+                    //Console.WriteLine(res);
                     winErrorCode = LsaNtStatusToWinError(res);
+                    //Console.WriteLine(winErrorCode);
                     if (winErrorCode != 0)
                     {
                         Console.WriteLine("LsaAddAccountRights failed: " + winErrorCode);
